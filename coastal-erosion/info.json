@@ -1,0 +1,11 @@
+{
+   "name": "coastal-erosion",
+   "version": "0.0.1",
+   "title": "Coastal Erosion",
+   "author": "Tei1988",
+   "contact": "tei1988@grifola.xyz",
+   "homepage": "",
+   "description": "Coastal Erosion",
+   "dependencies": ["base >= 0.16"],
+   "factorio_version":"0.16"
+}
