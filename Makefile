@@ -1,11 +1,11 @@
 ZIP=zip
 RM=rm
-VERSION=0.0.1
+VERSION=0.0.2
 MOD_BASE_NAME=coastal-erosion
 MOD_VERSIONED_NAME=${MOD_BASE_NAME}_${VERSION}
 OUTPUT=${MOD_VERSIONED_NAME}.zip
 
-LUACHECK_CMD=docker run --rm -v=${PWD}:/lua:ro tei1988/luacheck:0.23.0-alpine3.8 luacheck
+LUACHECK_CMD=docker run --rm -v=${PWD}:/lua:ro tei1988/luacheck:0.23.0-alpine3.9 luacheck
 
 .PHONY: all
 all: setup
