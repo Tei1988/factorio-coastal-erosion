@@ -6,6 +6,6 @@
    "contact": "tei1988@grifola.xyz",
    "homepage": "",
    "description": "Coastal Erosion",
-   "dependencies": ["base >= 0.16"],
-   "factorio_version":"0.16"
+   "dependencies": ["base >= 0.17"],
+   "factorio_version":"0.17"
 }
