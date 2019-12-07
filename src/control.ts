@@ -16,7 +16,7 @@ const wildTileNames: Array<string> = [
   'sand-1', 'sand-2', 'sand-3'
 ]
 
-const isDebug = true
+const isDebug = false
 const debugMessage = function (message: LocalisedString, color: Color = { r: 255, g: 255, b: 255}) {
     if (isDebug) {
         game.print(message, color)
@@ -144,8 +144,7 @@ const checkBuiltTilesOnPlayerBuiltTile = function(this: void, rawEvent: event) {
   });
 }
 
-const checkBuiltTilesOnRobotBuiltTile = function(this: void, rawEvent: event) {
-  const event = rawEvent as on_robot_built_tile
+const checkBuiltTilesOnRobotBuiltTile = function(this: void, event: on_robot_built_tile) {
   const coastMap = global.coastMap
   const s = game.surfaces[event.surface_index]
   const ts = event.tiles
@@ -186,15 +185,13 @@ const checkMinedTiles = function(surface: LuaSurface, tiles: OldTileAndPosition[
   })
 }
 
-const checkMinedTilesOnPlayerMinedTile = function(this: void, rawEvent: event) {
-  const event = rawEvent as on_player_mined_tile
+const checkMinedTilesOnPlayerMinedTile = function(this: void, event: on_player_mined_tile) {
   const s = game.surfaces[event.surface_index]
   const ts = event.tiles
   checkMinedTiles(s, ts)
 }
 
-const checkMinedTilesOnRobotMinedTile = function(this: void, rawEvent: event) {
-  const event = rawEvent as on_robot_mined_tile
+const checkMinedTilesOnRobotMinedTile = function(this: void, event: on_robot_mined_tile) {
   const s = game.surfaces[event.surface_index]
   const ts = event.tiles
   checkMinedTiles(s, ts)
@@ -240,7 +237,7 @@ const destroyCoastTile = function(position: Position) {
   es.forEach((e: LuaEntity) => {
     if (e.valid) {
       debugMessage('destroy_entity: ' + e.name)
-      if (isInTileNames(e.name, ['character', 'construction-robot'])) {
+      if (e.name === 'character') {
         return
       }
       if ((e.force as LuaForce).name === 'player') {
@@ -248,7 +245,7 @@ const destroyCoastTile = function(position: Position) {
           player.add_alert(e, defines.alert_type.entity_destroyed)
         });
       }
-      e.destroy({do_cliff_correction: true, raise_destory: false})
+      e.destroy({do_cliff_correction: true, raise_destroy: false})
     }
   })
   // set water tile
@@ -271,8 +268,8 @@ const erodeCoast = function(event: NthTickEvent) {
   }
 }
 
-script.on_nth_tick(50, erodeCoast)
-//script.on_nth_tick(1000, erodeCoast)
+//script.on_nth_tick(50, erodeCoast)
+script.on_nth_tick(1000, erodeCoast)
 
 script.on_init(() => {
   const coastMap = global.coastMap

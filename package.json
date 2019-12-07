@@ -1,6 +1,6 @@
 {
   "name": "factorio-coastal-erosion",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Coastal Erosion Mod for Factorio",
   "scripts": {
     "build": "node_modules/.bin/tstl -p tsconfig.json"
