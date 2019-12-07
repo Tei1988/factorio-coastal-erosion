@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "lib": ["ES2017"],
+        "strict": true,
+        "types": ["@types/factorio"],
+        "typeRoots": ["node_modules"],
+        "rootDir": "src",
+        "outDir": "coastal-erosion"
+    },
+    "tstl": {
+        "noImplicitSelf": true,
+        "luaTarget": "5.2",
+        "luaLibImport": "inline"
+    },
+    "include": ["src"]
+
+}

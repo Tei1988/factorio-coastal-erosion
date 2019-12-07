@@ -1,0 +1,26 @@
+{
+  "name": "factorio-coastal-erosion",
+  "version": "0.0.3",
+  "description": "Coastal Erosion Mod for Factorio",
+  "scripts": {
+    "build": "node_modules/.bin/tstl -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tei1988/factorio-coastal-erosion.git"
+  },
+  "keywords": [
+    "factorio",
+    "factorio-mod"
+  ],
+  "author": "Tei1988",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tei1988/factorio-coastal-erosion/issues"
+  },
+  "homepage": "https://github.com/Tei1988/factorio-coastal-erosion#readme",
+  "devDependencies": {
+    "@types/factorio": "git+https://github.com/sguest/factorio-types.git",
+    "typescript-to-lua": "^0.29.1"
+  }
+}
