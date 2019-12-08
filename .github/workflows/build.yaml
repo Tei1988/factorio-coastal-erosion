@@ -1,27 +1,28 @@
-name: build
+name: release
 on:
   push:
     tags: v*
 jobs:
   build:
-    name: Build
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 12.13.1
-      - run: |-
+      - name: Build
+        run: |-
           npm install --global npm@6
           npm ci
           npm run-script build
           sed -i "s/^function __TS__/local function __TS__/g" coastal-erosion/*.lua
           sed -i "s/to_be_replaced/${GITHUB_TAG:11}/g" coastal-erosion/info.json
+        env:
+          GITHUB_TAG: ${{ github.ref }}
       - id: packing
-        name: Create Release Package
+        name: Package
         run: |-
-          read BEGIN END <<< $(cat coastal-erosion/changelog.txt | grep -n -e '---------------------------------------------------------------------------------------------------' | awk -F ':' '{print $1}' | xargs)
-          RELEASE_LOG=$(cat coastal-erosion/changelog.txt | awk "(NR > ${BEGIN} && NR < ${END}){print \$0}")
           echo "::set-output name=release_note::${RELEASE_LOG}"
           mv coastal-erosion coastal-erosion_${GITHUB_TAG:11}
           zip -r coastal-erosion_${GITHUB_TAG:11}.zip coastal-erosion_${GITHUB_TAG:11}
@@ -38,7 +39,6 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: ${{ steps.packing.outputs.release_note }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
