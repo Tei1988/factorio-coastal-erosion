@@ -23,7 +23,6 @@ jobs:
       - id: packing
         name: Package
         run: |-
-          echo "::set-output name=release_note::${RELEASE_LOG}"
           mv coastal-erosion coastal-erosion_${GITHUB_TAG:11}
           zip -r coastal-erosion_${GITHUB_TAG:11}.zip coastal-erosion_${GITHUB_TAG:11}
           echo "::set-output name=asset_path::./coastal-erosion_${GITHUB_TAG:11}.zip"
