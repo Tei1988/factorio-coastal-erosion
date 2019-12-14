@@ -11,25 +11,31 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12.13.1
+      - name: Setup
+        id: setup
+        run: |-
+          MOD_NAME=${FACTORIO_MOD_NAME}
+          MOD_VERSION=${GITHUB_TAG/"refs/tags/v"}
+          echo "::set-output name=mod_name::${MOD_NAME}"
+          echo "::set-output name=mod_version::${MOD_VERSION}"
+        env:
+          GITHUB_TAG: ${{ github.ref }}
+          FACTORIO_MOD_NAME: coastal-erosion
       - name: Build
         run: |-
           npm install --global npm@6
           npm ci
           npm run-script build
-          sed -i "s/^function __TS__/local function __TS__/g" coastal-erosion/*.lua
-          sed -i "s/to_be_replaced/${GITHUB_TAG:11}/g" coastal-erosion/info.json
+          sed -i "s/^function __TS__/local function __TS__/g" ${FACTORIO_MOD_NAME}/*.lua
+          sed -i "s/to_be_replaced/${FACTORIO_MOD_VERSION}/g" ${FACTORIO_MOD_NAME}/info.json
         env:
-          GITHUB_TAG: ${{ github.ref }}
-      - id: packing
-        name: Package
-        run: |-
-          mv coastal-erosion coastal-erosion_${GITHUB_TAG:11}
-          zip -r coastal-erosion_${GITHUB_TAG:11}.zip coastal-erosion_${GITHUB_TAG:11}
-          echo "::set-output name=asset_path::./coastal-erosion_${GITHUB_TAG:11}.zip"
-          echo "::set-output name=asset_name::coastal-erosion_${GITHUB_TAG:11}.zip"
-          echo "::set-output name=asset_content_type::application/zip"
-        env:
-          GITHUB_TAG: ${{ github.ref }}
+          FACTORIO_MOD_NAME: ${{ steps.setup.outputs.mod_name }}
+          FACTORIO_MOD_VERSION: ${{ steps.setup.outputs.mod_version }}
+      - name: Package
+        id: packaging
+        uses: Tei1988/factorio-mod-package@test
+        with:
+          mod_base_dir: ${{ steps.setup.outputs.mod_name }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -41,7 +47,6 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload Release Asset
-        id: upload-release-asset 
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,5 +54,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.packing.outputs.asset_path }}
-          asset_name: ${{ steps.packing.outputs.asset_name }}
-          asset_content_type: ${{ steps.packing.outputs.asset_content_type }}
+          asset_name: ${{ steps.setup.outputs.mod_name }}_${{ steps.setup.outputs.mod_version }}.zip
+          asset_content_type: 'application/zip'
