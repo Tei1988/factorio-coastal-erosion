@@ -33,7 +33,7 @@ jobs:
           FACTORIO_MOD_VERSION: ${{ steps.setup.outputs.mod_version }}
       - name: Package
         id: packaging
-        uses: Tei1988/factorio-mod-package@test
+        uses: Tei1988/factorio-mod-package@master
         with:
           mod_base_dir: ${{ steps.setup.outputs.mod_name }}
       - name: Create Release
@@ -53,6 +53,6 @@ jobs:
           GITHUB_TAG: ${{ github.ref }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.packing.outputs.asset_path }}
+          asset_path: ${{ steps.packaging.outputs.asset_path }}
           asset_name: ${{ steps.setup.outputs.mod_name }}_${{ steps.setup.outputs.mod_version }}.zip
           asset_content_type: 'application/zip'
