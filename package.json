@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Tei1988/factorio-coastal-erosion#readme",
   "devDependencies": {
-    "@types/factorio": "git+https://github.com/sguest/factorio-types.git",
+    "@types/factorio": "git+https://github.com/Tei1988/factorio-types.git",
     "typescript-to-lua": "^0.29.1"
   }
 }

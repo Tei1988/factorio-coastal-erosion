@@ -16,11 +16,13 @@ const wildTileNames: Array<string> = [
   'sand-1', 'sand-2', 'sand-3'
 ]
 
-const isDebug = false
 const debugMessage = function (message: LocalisedString, color: Color = { r: 255, g: 255, b: 255}) {
+  game.connected_players.forEach(player => {
+    const isDebug = (settings.get_player_settings(player)['coastal-erosion-debug-output'].value) as boolean
     if (isDebug) {
-        game.print(message, color)
+      player.print(message, color)
     }
+  })
 }
 const isInTileNames = function (tileName: string, tileNames: Array<string>) {
   return tileNames.indexOf(tileName) >= 0
@@ -260,7 +262,9 @@ const erodeCoast = function(event: NthTickEvent) {
   debugMessage('coastCount: ' + coastCount)
   const rg = game.create_random_generator()
   rg.re_seed(event.tick)
-  const n = Math.max(Math.min(100, coastCount * 0.05), 1)
+  const maxErosionTiles = (settings.startup['coastal-erosion-max-erosion-tiles'].value) as number
+  const erosionRate = (settings.startup['coastal-erosion-erosion-tiles-rate'].value) as number
+  const n = Math.max(Math.min(maxErosionTiles, coastCount * erosionRate), 1)
   for (let i = 1; i <= n; i = i + 1) {
     const p = chooseTargetCoast(rg)
     if (p === undefined) continue
@@ -268,8 +272,7 @@ const erodeCoast = function(event: NthTickEvent) {
   }
 }
 
-//script.on_nth_tick(50, erodeCoast)
-script.on_nth_tick(1000, erodeCoast)
+script.on_nth_tick((settings.startup['coastal-erosion-erosion-speed'].value) as number, erodeCoast)
 
 script.on_init(() => {
   const coastMap = global.coastMap
