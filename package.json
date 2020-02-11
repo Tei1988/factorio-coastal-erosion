@@ -3,7 +3,9 @@
   "version": "0.0.5",
   "description": "Coastal Erosion Mod for Factorio",
   "scripts": {
-    "build": "node_modules/.bin/tstl -p tsconfig.json"
+    "build": "node_modules/.bin/tstl -p tsconfig.json",
+    "format": "node_modules/.bin/prettier '**/*.{css,html,js,json,jsx,md,scss,ts,tsx,yaml,yml}' --write",
+    "lint": "node_modules/.bin/eslint '**/*.{js,jsx,ts,tsx}'"
   },
   "repository": {
     "type": "git",
@@ -18,9 +20,23 @@
   "bugs": {
     "url": "https://github.com/Tei1988/factorio-coastal-erosion/issues"
   },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "es5"
+  },
   "homepage": "https://github.com/Tei1988/factorio-coastal-erosion#readme",
   "devDependencies": {
     "@types/factorio": "git+https://github.com/Tei1988/factorio-types.git",
+    "@types/node": "^13.7.0",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.5",
     "typescript-to-lua": "^0.29.1"
   }
 }

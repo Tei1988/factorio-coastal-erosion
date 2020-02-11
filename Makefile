@@ -1,11 +1,11 @@
 ZIP=zip
 RM=rm
-VERSION=0.0.5
-MOD_BASE_NAME=coastal-erosion
-MOD_VERSIONED_NAME=${MOD_BASE_NAME}_${VERSION}
+FACTORIO_MOD_VERSION=0.0.6
+FACTORIO_MOD_NAME=coastal-erosion
+MOD_VERSIONED_NAME=${FACTORIO_MOD_NAME}_${FACTORIO_MOD_VERSION}
 OUTPUT=${MOD_VERSIONED_NAME}.zip
 
-LUACHECK_CMD=docker run --rm -v=${PWD}:/lua:ro tei1988/luacheck:0.23.0-alpine3.9 luacheck
+NPM=docker run -u $(id -u):$(id -g) --entrypoint npm -w /src -v ${PWD}:/src -it --rm circleci/node:12-buster
 
 .PHONY: all
 all: setup
@@ -13,16 +13,15 @@ all: setup
 .PHONY: setup
 setup: ${OUTPUT}
 
-.PHONY: check
-check:
-	${LUACHECK_CMD} ${MOD_BASE_NAME}
-
 ${OUTPUT}: ${MOD_VERSIONED_NAME}
-	${ZIP} -r $@ $<
-	${RM} -r $<
+	${NPM} run-script build
+	sed -i "s/^function __TS__/local function __TS__/g" $</*.lua
+	sed -i "s/to_be_replaced/${FACTORIO_MOD_VERSION}/g" $</info.json
+	zip -r $@ $<
+	rm -r $<
 
 ${MOD_VERSIONED_NAME}:
-	cp -r ${MOD_BASE_NAME} $@
+	cp -r ${FACTORIO_MOD_NAME} $@
 
 .PHONY: clean
 clean:
