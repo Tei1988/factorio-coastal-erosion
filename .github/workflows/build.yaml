@@ -26,7 +26,7 @@ jobs:
           npm install --global npm@6
           npm ci
           npm run-script build
-          sed -i "s/^function __TS__/local function __TS__/g" ${FACTORIO_MOD_NAME}/*.lua
+          sed -i "s/^function __TS__/local function __TS__/g" ${FACTORIO_MOD_NAME}/*.lua ${FACTORIO_MOD_NAME}/**/*.lua
           sed -i "s/to_be_replaced/${FACTORIO_MOD_VERSION}/g" ${FACTORIO_MOD_NAME}/info.json
         env:
           FACTORIO_MOD_NAME: ${{ steps.setup.outputs.mod_name }}
