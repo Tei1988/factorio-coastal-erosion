@@ -4,7 +4,7 @@
   "description": "Coastal Erosion Mod for Factorio",
   "scripts": {
     "build": "node_modules/.bin/tstl -p tsconfig.json",
-    "format": "node_modules/.bin/prettier '**/*.{css,html,js,json,jsx,md,scss,ts,tsx,yaml,yml}' --write",
+    "format": "node_modules/.bin/prettier '**/*.{json,md,ts,yaml,yml}' --write",
     "lint": "node_modules/.bin/eslint '**/*.{js,jsx,ts,tsx}'",
     "test": "node_modules/.bin/jest --passWithNoTests"
   },
@@ -37,11 +37,15 @@
     },
     "globals": {
       "ts-jest": {
-        "tsConfig": "tsconfig.json"
+        "tsConfig": "tsconfig.jest.json"
       }
     },
     "testMatch": [
       "**/tests/**/*.ts"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.ts"
     ]
   },
   "homepage": "https://github.com/Tei1988/factorio-coastal-erosion#readme",

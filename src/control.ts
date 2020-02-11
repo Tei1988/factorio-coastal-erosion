@@ -1,42 +1,10 @@
+import { TileName, WaterTileManager, TerrainTileManager } from 'models/tile';
+
 global.coastMap = global.coastMap || {};
 global.coastCount = global.coastCount || 0;
 
-const waterTileNames: Array<string> = ['water', 'water-green'];
-const deepWaterTileNames: Array<string> = ['deepwater', 'deepwater-green'];
-const allWaterTileNames: Array<string> = ['water', 'water-green', 'deepwater', 'deepwater-green'];
-
-const checkTiles: Array<string> = [
-  'stone-path',
-  'refined-concrete',
-  'refined-hazard-concrete-left',
-  'refined-hazard-concrete-right',
-];
-
-const wildTileNames: Array<string> = [
-  'dirt-1',
-  'dirt-2',
-  'dirt-3',
-  'dirt-4',
-  'dirt-5',
-  'dirt-6',
-  'dirt-7',
-  'dry-dirt',
-  'landfill',
-  'grass-1',
-  'grass-2',
-  'grass-3',
-  'grass-4',
-  'lab-dark-1',
-  'lab-dark-2',
-  'lab-white',
-  'red-desert-0',
-  'red-desert-1',
-  'red-desert-2',
-  'red-desert-3',
-  'sand-1',
-  'sand-2',
-  'sand-3',
-];
+const waterTileManager = new WaterTileManager();
+const terrainTileManager = new TerrainTileManager();
 
 const debugMessage = function(message: LocalisedString, color: Color = { r: 255, g: 255, b: 255 }) {
   game.connected_players.forEach(player => {
@@ -46,14 +14,12 @@ const debugMessage = function(message: LocalisedString, color: Color = { r: 255,
     }
   });
 };
-const isInTileNames = function(tileName: string, tileNames: Array<string>) {
-  return tileNames.indexOf(tileName) >= 0;
-};
+
 const isAnyWaterTile = function(tileName: string) {
-  return isInTileNames(tileName, allWaterTileNames);
+  return waterTileManager.check(tileName);
 };
 const isAnyWildTile = function(tileName: string) {
-  return isInTileNames(tileName, wildTileNames);
+  return terrainTileManager.check(tileName);
 };
 
 const findKeyByIndex = function(tidx: number, map: { [key: number]: any }) {
@@ -130,7 +96,7 @@ const registerCoastTilesToCoastMapOnChunkGenerated = function(this: void, rawEve
   const coastMap = global.coastMap;
   const s = event.surface;
   const a = event.area;
-  s.find_tiles_filtered({ area: a, name: waterTileNames }).forEach((tile: LuaTile) => {
+  s.find_tiles_filtered({ area: a, name: WaterTileManager.fordTiles }).forEach((tile: LuaTile) => {
     updateNeighboursCoastTilePoint(s, tile.position);
   });
 };
@@ -304,7 +270,7 @@ script.on_nth_tick(settings.startup['coastal-erosion-erosion-speed'].value as nu
 script.on_init(() => {
   const coastMap = global.coastMap;
   const s = game.surfaces[1];
-  s.find_tiles_filtered({ name: waterTileNames }).forEach(t => {
+  s.find_tiles_filtered({ name: WaterTileManager.fordTiles }).forEach(t => {
     updateNeighboursCoastTilePoint(s, t.position);
   });
 });

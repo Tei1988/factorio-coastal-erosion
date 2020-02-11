@@ -15,7 +15,7 @@ setup: ${OUTPUT}
 
 ${OUTPUT}: ${MOD_VERSIONED_NAME}
 	${NPM} run-script build
-	sed -i "s/^function __TS__/local function __TS__/g" $</*.lua
+	sed -i "s/^function __TS__/local function __TS__/g" $</*.lua $</**/*.lua
 	sed -i "s/to_be_replaced/${FACTORIO_MOD_VERSION}/g" $</info.json
 	zip -r $@ $<
 	rm -r $<
