@@ -3,10 +3,14 @@
     "target": "es2019",
     "lib": ["es2019"],
     "strict": true,
-    "types": ["@types/factorio"],
+    "types": [
+        "@types/factorio",
+        "@types/jest"
+    ],
     "typeRoots": ["node_modules"],
     "rootDir": "src",
-    "outDir": "coastal-erosion"
+    "outDir": "coastal-erosion",
+    "esModuleInterop": true
   },
   "tstl": {
     "noImplicitSelf": true,

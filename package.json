@@ -5,7 +5,8 @@
   "scripts": {
     "build": "node_modules/.bin/tstl -p tsconfig.json",
     "format": "node_modules/.bin/prettier '**/*.{css,html,js,json,jsx,md,scss,ts,tsx,yaml,yml}' --write",
-    "lint": "node_modules/.bin/eslint '**/*.{js,jsx,ts,tsx}'"
+    "lint": "node_modules/.bin/eslint '**/*.{js,jsx,ts,tsx}'",
+    "test": "node_modules/.bin/jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
@@ -26,16 +27,33 @@
     "printWidth": 120,
     "trailingComma": "es5"
   },
+  "jest": {
+    "moduleFileExtensions": ["ts", "js"],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/tests/**/*.ts"
+    ]
+  },
   "homepage": "https://github.com/Tei1988/factorio-coastal-erosion#readme",
   "devDependencies": {
     "@types/factorio": "git+https://github.com/Tei1988/factorio-types.git",
+    "@types/jest": "^25.1.2",
     "@types/node": "^13.7.0",
     "@typescript-eslint/eslint-plugin": "^2.19.2",
     "@typescript-eslint/parser": "^2.19.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^25.1.0",
     "prettier": "^1.19.1",
+    "ts-jest": "^25.2.0",
     "typescript": "^3.7.5",
     "typescript-to-lua": "^0.29.1"
   }
