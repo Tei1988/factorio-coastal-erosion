@@ -1,0 +1,70 @@
+name: Package Updates
+on:
+  schedule:
+    - cron: '30 09 * * 1'
+jobs:
+  ci:
+    strategy:
+      matrix:
+        context:
+          - name: Factorio Coastal Erosion MOD
+            short-name: 'factorio-coastal-erosion'
+            path: '.'
+            assigner: Tei1988
+            run-scripts: "check-format lint test build"
+      fail-fast: false
+    name: ${{ matrix.context.name }} Package Updates
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ matrix.context.path }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.16.3'
+    - name: Install packages
+      run: npm install
+    - id: ncu
+      name: Check package updates
+      run: |-
+        RESULT=$(npm run-script update-packages)
+        RESULT="${RESULT//'%'/'%25'}"
+        RESULT="${RESULT//$'\n'/'%0A'}"
+        RESULT="${RESULT//$'\r'/'%0D'}" 
+        echo "::set-output name=message::${RESULT}"
+    - id: check_diff
+      name: Check diff
+      run: git diff --exit-code
+      continue-on-error: true
+    - name: Install updated packages
+      if: ${{ steps.check_diff.outcome == 'failure' }}
+      run: npm install
+    - name: Run scripts
+      if: ${{ steps.check_diff.outcome == 'failure' }}
+      run: |-
+        set -e
+        for SUBCMD in ${{ matrix.contet.run-scripts }}; do
+          npm run-script ${SUBCMD};
+        done
+    - name: Git commit
+      if: ${{ steps.check_diff.outcome == 'failure' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |-
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions"
+        git branch update-${{ matrix.context.short-name }}-packages
+        git checkout update-${{ matrix.context.short-name }}-packages
+        git add package.json package-lock.json
+        git commit -m "Update package.json and package-lock.json"
+        git push origin update-${{ matrix.context.short-name }}-packages
+    - name: Send Pull Request
+      if: ${{ steps.check_diff.outcome == 'failure' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: hub pull-request -m "${{ steps.ncu.outputs.message }}" -a "${{ matrix.context.assigner }}"
+      
