@@ -1,7 +1,7 @@
 name: Package Updates
 on:
   schedule:
-    - cron: '30 09 * * 1'
+    - cron: '30 09 * * *'
 jobs:
   ci:
     strategy:
