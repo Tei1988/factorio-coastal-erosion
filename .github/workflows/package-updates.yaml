@@ -66,5 +66,8 @@ jobs:
       if: ${{ steps.check_diff.outcome == 'failure' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: hub pull-request -m "Update npm package dependencies\n\n${{ steps.ncu.outputs.message }}" -a "${{ matrix.context.assigner }}"
+      run: |-
+        hub pull-request -m "Update npm package dependencies\
+        \
+        ${{ steps.ncu.outputs.message }}" -a "${{ matrix.context.assigner }}"
       
