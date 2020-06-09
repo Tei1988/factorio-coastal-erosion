@@ -1,3 +1,4 @@
 *.zip
+coverage
 node_modules
-coastal-erosion/*.lua
+coastal-erosion/**/*.lua
