@@ -61,10 +61,10 @@ jobs:
         git checkout update-${{ matrix.context.short-name }}-packages
         git add package.json package-lock.json
         git commit -m "Update package.json and package-lock.json"
-        git push origin update-${{ matrix.context.short-name }}-packages
+        git push --force origin update-${{ matrix.context.short-name }}-packages
     - name: Send Pull Request
       if: ${{ steps.check_diff.outcome == 'failure' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: hub pull-request -m "${{ steps.ncu.outputs.message }}" -a "${{ matrix.context.assigner }}"
+      run: hub pull-request -m "Update npm package dependencies\n\n${{ steps.ncu.outputs.message }}" -a "${{ matrix.context.assigner }}"
       
