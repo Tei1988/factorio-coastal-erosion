@@ -67,7 +67,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |-
-        hub pull-request -m "Update npm package dependencies\
-        \
-        ${{ steps.ncu.outputs.message }}" -a "${{ matrix.context.assigner }}"
+        hub pull-request -m "Update npm package dependencies" -m "${{ steps.ncu.outputs.message }}" -a "${{ matrix.context.assigner }}"
       
